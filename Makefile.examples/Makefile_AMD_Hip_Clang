@@ -1,0 +1,108 @@
+#################################################################################
+###---###                G a i a                                        ###---###
+###---###              G S R P a r                                      ###---###
+###---###            M a k e f i l e                                    ###---###
+###---###---###---###---###---###---###---###---###---###---###---###---###---###
+###---###---###---###---###---###---###---###---###---###---###---###---###---###
+#################################################################################
+
+#################################################################################
+###---### C O M P I L E R   S E T T I N G S                             ###---###
+###---###---###---###---###---###---###---###---###---###---###---###---###---###
+
+GNUTOOLCHAIN	?=	/opt/cray/pe/gcc/12.2.0/snos #PATHTOGCC #exmaple: /opt/cray/pe/gcc/12.2.0/snos
+MPI_HOME		?=	$(MPICH_DIR)
+GPUARCH			?=	gfx90a
+ROCM_PATH		?=	$(ROCM_PATH)
+HIPSTDAR_ROOT	?=	#exmaple ~/roc-stdpar/include 
+
+# Conditional statements
+ifeq ("$(GPUARCH)","gfx90a")
+    $(info Compiling code for gfx90a)
+else ifeq ("$(GPUARCH)","gfx80a")
+    $(info Compiling code for gfx80a)
+else
+    $(info GPUARCH has an unexpected value: $(GPUARCH))
+endif
+
+
+CMPSYCL  		= acpp
+CMPNVCPP  		= acpp
+CMPOMPGPU  		= amdclang++
+CMPHIP			= amdclang++
+
+###---###
+OPTCOM			= -w -std=c++20 -D__AMD__ -O3 -stdlib=libstdc++
+# OPTCOM			=	 -std=c++20 -D__AMD__ -O3 -stdlib=libstdc++
+OPTSYCL		= $(OPTCOM)  --gcc-toolchain=$(GNUTOOLCHAIN) -stdlib=libstdc++ --acpp-platform=rocm --acpp-targets=hip:$(GPUARCH) --acpp-gpu-arch=$(GPUARCH) -munsafe-fp-atomics 
+OPTSTDPARG	= $(OPTCOM)  --gcc-toolchain=$(GNUTOOLCHAIN) --acpp-platform=rocm --acpp-stdpar --acpp-targets=hip:$(GPUARCH) --acpp-stdpar-unconditional-offload --acpp-gpu-arch=$(GPUARCH) -munsafe-fp-atomics -D__HIPCC__ 
+OPTOMPGPU   = $(OPTCOM)  -fstrict-aliasing -faligned-allocation -fnew-alignment=256 --gcc-toolchain=$(GNUTOOLCHAIN) -fopenmp --offload-arch=$(GPUARCH) -munsafe-fp-atomics -D__HIP_PLATFORM_AMD__ -D_OPENMP #-DAUTO_TUNING
+OPTHIP     	= $(OPTCOM) --gcc-toolchain=$(GNUTOOLCHAIN) -D__HIP_ROCclr__ -D__HIP_ARCH_GFX90A__=1 --rocm-path=${ROCM_PATH} --offload-arch=gfx90a  -ffast-math -fstrict-aliasing -faligned-allocation -fnew-alignment=128 -munsafe-fp-atomics 
+
+
+HIPFLAGS=-L${ROCM_PATH}/lib -lamdhip64 -lhsa-runtime64
+HIPCFLAGS=$(shell $(ROCM_PATH)/bin/hipconfig --cpp_config)
+###---###
+CPPCUDA		= $(CMPCUDA) $(OPTCUDA)
+CPPSYCL		= $(CMPSYCL) $(OPTSYCL)
+CPPSTDPARG	= $(CMPNVCPP) $(OPTSTDPARG)
+CPPOMPGPU	= $(CMPOMPGPU) $(OPTOMPGPU)
+CPPHIP		= $(CMPHIP) $(OPTHIP) $(HIPCFLAGS)
+
+
+###---###
+GAIA_INC = -I$(PWD)/include
+MPI_INC = -I$(MPI_HOME)/include
+INCLUDE = $(GAIA_INC) $(MPI_INC)
+CPPFLAGS = $(INCLUDE)
+MPI_LIB = -L$(MPI_HOME)/lib -lmpi
+LIB      = $(MPI_LIB)  $(HIPFLAGS)
+
+###---### O B J E C T S
+GAIAGSRSIMSYCL			= build_obj/lsqrblas_sycl.o build_obj/lsqr_sycl.o build_obj/solvergaiaSim_sycl.o build_obj/util_sycl.o
+GAIAGSRSIMSTDPARGPU		= build_obj/lsqrblas_stdpar.o build_obj/lsqr_stdpar.o build_obj/solvergaiaSim_stdpar.o build_obj/util_stdpar.o
+GAIAGSRSIMOMPGPU		= build_obj/lsqrblas_omp.o build_obj/lsqr_openmp_gpu.o build_obj/solvergaiaSim_omp.o build_obj/util_omp.o
+GAIAGSRSIMHIP			= build_obj/lsqrblas_hip.o build_obj/lsqr_hip.o build_obj/solvergaiaSim_hip.o build_obj/util_hip.o
+
+###---### R U L E S
+.PHONY: all sycl stdparG ompG hip dir clean
+
+all:  clean sycl stdparG ompG hip
+sycl: build_obj/GaiaGsrParSimAdaptiveSycl.x
+stdparG: build_obj/GaiaGsrParSimStdparGPU_ACPP.x
+ompG: build_obj/GaiaGsrParSimOMPGpu.x
+hip: build_obj/GaiaGsrParSimHip.x
+
+dir:
+	mkdir -p build_obj
+
+clean:
+	rm -rf build_obj *.x
+
+build_obj/GaiaGsrParSimStdparGPU_ACPP.x: dir src/solvergaiaSim.cpp src/util.cpp  src/lsqrblas.cpp src/lsqr_stdpar.cpp
+	$(CPPSTDPARG) $(CPPFLAGS) -c src/solvergaiaSim.cpp -o build_obj/solvergaiaSim_stdpar.o
+	$(CPPSTDPARG) $(CPPFLAGS) -c src/util.cpp -o build_obj/util_stdpar.o
+	$(CPPSTDPARG) $(CPPFLAGS) -c src/lsqrblas.cpp -o build_obj/lsqrblas_stdpar.o
+	$(CPPSTDPARG) $(CPPFLAGS) -c src/lsqr_stdpar.cpp -o build_obj/lsqr_stdpar.o
+	$(CPPSTDPARG) -o GaiaGsrParSimStdparGPU_ACPP.x $(GAIAGSRSIMSTDPARGPU) $(INCLUDE) $(LIB)
+
+build_obj/GaiaGsrParSimAdaptiveSycl.x: dir src/lsqr_sycl.cpp src/lsqrblas.cpp src/util.cpp src/solvergaiaSim.cpp
+	$(CPPSYCL) $(CPPFLAGS) -c src/lsqr_sycl.cpp -o build_obj/lsqr_sycl.o
+	$(CPPSYCL) $(CPPFLAGS) -c src/lsqrblas.cpp -o build_obj/lsqrblas_sycl.o
+	$(CPPSYCL) $(CPPFLAGS) -c src/util.cpp -o build_obj/util_sycl.o
+	$(CPPSYCL) $(CPPFLAGS) -c src/solvergaiaSim.cpp -o build_obj/solvergaiaSim_sycl.o
+	$(CPPSYCL) -o GaiaGsrParSimAdaptiveSycl.x $(GAIAGSRSIMSYCL) $(INCLUDE) $(LIB)
+
+build_obj/GaiaGsrParSimOMPGpu.x: dir src/lsqr_openmp_gpu.cpp src/lsqrblas.cpp  src/util.cpp src/solvergaiaSim.cpp
+	$(CPPOMPGPU) $(CPPFLAGS) -c src/lsqr_openmp_gpu.cpp	-o build_obj/lsqr_openmp_gpu.o
+	$(CPPOMPGPU) $(CPPFLAGS) -c src/lsqrblas.cpp -o build_obj/lsqrblas_omp.o
+	$(CPPOMPGPU) $(CPPFLAGS) -c src/util.cpp -o build_obj/util_omp.o
+	$(CPPOMPGPU) $(CPPFLAGS) -c src/solvergaiaSim.cpp -o build_obj/solvergaiaSim_omp.o
+	$(CPPOMPGPU) -o GaiaGsrParSimOMPGpu.x $(GAIAGSRSIMOMPGPU) $(INCLUDE) $(LIB)
+
+build_obj/GaiaGsrParSimHip.x: dir src/lsqr_hip.cpp src/lsqrblas.cpp src/util.cpp src/solvergaiaSim.cpp
+	$(CPPHIP) $(CPPFLAGS) -x hip -c src/lsqr_hip.cpp	-o build_obj/lsqr_hip.o
+	$(CPPHIP) $(CPPFLAGS) -x hip -c src/lsqrblas.cpp -o build_obj/lsqrblas_hip.o
+	$(CPPHIP) $(CPPFLAGS) -x hip -c src/util.cpp -o build_obj/util_hip.o
+	$(CPPHIP) $(CPPFLAGS) -x hip -c src/solvergaiaSim.cpp -o build_obj/solvergaiaSim_hip.o
+	$(CPPHIP) -o GaiaGsrParSimHip.x $(GAIAGSRSIMHIP) $(INCLUDE) $(LIB)

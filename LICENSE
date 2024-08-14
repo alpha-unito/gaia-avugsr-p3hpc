@@ -1,0 +1,41 @@
+/* Copyright (C) by INAF - All Rights Reserved
+ *
+ * This code had been developed for the Italian participation in the data 
+ * processing and analysis of the European Space Agency (ESA) mission Gaia 
+ * (DPAC Consortium). 
+ * In particular, the code solves the GSR model of the CU3 DU AVU (Astrometric
+ * Verification Unit) of DPAC, as per the contract between Agenzia Spaziale 
+ * Italiana (ASI) and Istituto Nazionale per l'Astrofisica (INAF), 
+ * implementing Article 5 of the Gaia MLA agreement between ESA and ASI.
+ * The code is proprietary and confidential. 
+ * Copying of this code, via any medium is strictly prohibited, unless expressly 
+ * authorized by the authors: 
+ *   - Mario Gilberto Lattanzi (mario.lattanzi@inaf.it);
+ *   - Alberto Vecchiato (alberto.vecchiato@inaf.it);
+ *   - Beatrice Bucciarelli (beatrice.bucciarelli@inaf.it); 
+ *   - Roberto Morbidelli (roberto.morbidelli@inaf.it);
+ *   - Ugo Becciani (ugo.becciani@inaf.it);
+ *   - Valentina Cesare (valentina.cesare@inaf.it);
+ *   - Giulio Malenza (giulio.malenza@unito.it);
+ *   - Marco Edoardo Santimaria (marcoedoardo.santimaria@unito.it);
+ *   - Robert Rene' Maria Birke (robert.birke@unito.it)
+ *
+ * The above authors, for the sole purpose of evaluating the article submitted for
+ * the Conference SuperComputing 2024, expressly authorize the assigned Referees
+ * to download, execute, and modify the code.  
+ *
+ * Code versions:
+ *	- May 23rd 1996, by M. G. Lattanzi, A. Vecchiato, 
+ *	  B. Bucciarelli (written in Fortran)
+ *	- March 21st 2005, by A. Vecchiato, R. Morbidelli 
+ *	  (written in Fortran 90, with dynamical memory allocation)
+ *	- 2013-2021, by U. Becciani and A. Vecchiato (written in C + C++ and 
+ *	  parallelized with MPI + OpenMP, realized for the ESA Gaia Mission)
+ *	- 2021, by U. Becciani and V. Cesare (written in C + C++ and 
+ *	  parallelized with MPI + OpenACC)
+ *	- May 25th 2022, by U. Becciani and V. Cesare (written in C + C++ and 
+ *	  parallelized with MPI + CUDA)
+ *  - 2023-2024, by G. Malenza, M. E. Santimaria, and V. Cesare (written 
+ *	  in C + C++ and parallelized with MPI + CUDA, MPI + HIP, MPI + C++ PSTL, 
+ *	  MPI + OpenMP-GPU, and MPI + SYCL)
+ */

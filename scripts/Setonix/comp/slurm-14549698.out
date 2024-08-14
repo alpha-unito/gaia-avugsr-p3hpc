@@ -1,0 +1,274 @@
+Compiling code for gfx90a
+rm -rf build_obj *.x
+Compiling code for gfx90a
+mkdir -p build_obj
+acpp -std=c++20 -D__AMD__ -O3 -stdlib=libstdc++  --gcc-toolchain=/opt/cray/pe/gcc/12.2.0/snos --acpp-platform=rocm --acpp-stdpar --acpp-targets=hip:gfx90a --acpp-stdpar-unconditional-offload --acpp-gpu-arch=gfx90a -munsafe-fp-atomics -D__HIPCC__  -I/scratch/pawsey0007/<user_name>/src/24_sc_gaia/include -I/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1/include -c src/solvergaiaSim.cpp -o build_obj/solvergaiaSim_stdpar.o
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+In file included from src/solvergaiaSim.cpp:35:
+src/gaiasim_includes/solver_utils.hpp:488:30: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+  488 |     printf("itnlim= %7ld\n", lsqr_input::itnlim);
+      |                     ~~~~     ^~~~~~~~~~~~~~~~~~
+      |                     %7d
+src/gaiasim_includes/solver_utils.hpp:507:30: warning: format specifies type 'short' but the argument has type 'long' [-Wformat]
+  507 |     printf("nGlobP= %7hd\n", glob_params::nGlobP);
+      |                     ~~~~     ^~~~~~~~~~~~~~~~~~~
+      |                     %7ld
+src/gaiasim_includes/solver_utils.hpp:540:33: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+  540 |         printf("-nCovEle %ld ", numberOfCovEle);
+      |                          ~~~    ^~~~~~~~~~~~~~
+      |                          %d
+src/solvergaiaSim.cpp:180:93: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  179 |         printf("Abort. Empty system nparam=0 . nAstroPSolved=%d nAttP=%d nInstrPSolved=%d nGlobP=%d\n",
+      |                                                                                                  ~~
+      |                                                                                                  %ld
+  180 |                astro_params::nAstroPSolved, att_params::nAttP, astro_params::nInstrPSolved, glob_params::nGlobP);
+      |                                                                                             ^~~~~~~~~~~~~~~~~~~
+src/solvergaiaSim.cpp:389:123: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  388 |     printf("PE = %d, VrIdAstroPDimMax = %ld, VrIdAstroPDim = %ld, nAstroPSolved = %d, nAttParam = %d, nInstrParam = %d, nGlobalParam = %d\n",
+      |                                                                                                   ~~
+      |                                                                                                   %ld
+  389 |            system_params::myid, astro_params::VrIdAstroPDimMax, astro_params::VrIdAstroPDim, astro_params::nAstroPSolved, att_params::nAttParam, instr_params::nInstrParam, glob_params::nGlobalParam);
+      |                                                                                                                           ^~~~~~~~~~~~~~~~~~~~~
+src/solvergaiaSim.cpp:389:146: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  388 |     printf("PE = %d, VrIdAstroPDimMax = %ld, VrIdAstroPDim = %ld, nAstroPSolved = %d, nAttParam = %d, nInstrParam = %d, nGlobalParam = %d\n",
+      |                                                                                                                     ~~
+      |                                                                                                                     %ld
+  389 |            system_params::myid, astro_params::VrIdAstroPDimMax, astro_params::VrIdAstroPDim, astro_params::nAstroPSolved, att_params::nAttParam, instr_params::nInstrParam, glob_params::nGlobalParam);
+      |                                                                                                                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/solvergaiaSim.cpp:389:173: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  388 |     printf("PE = %d, VrIdAstroPDimMax = %ld, VrIdAstroPDim = %ld, nAstroPSolved = %d, nAttParam = %d, nInstrParam = %d, nGlobalParam = %d\n",
+      |                                                                                                                                        ~~
+      |                                                                                                                                        %ld
+  389 |            system_params::myid, astro_params::VrIdAstroPDimMax, astro_params::VrIdAstroPDim, astro_params::nAstroPSolved, att_params::nAttParam, instr_params::nInstrParam, glob_params::nGlobalParam);
+      |                                                                                                                                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/allocators.hpp:68:9: note: in instantiation of function template specialization 'fast_allocate_vector<double, long>' requested here
+   68 |         fast_allocate_vector<T>(ptr,elements);
+      |         ^
+src/gaiasim_includes/namespaces.hpp:58:9: note: in instantiation of function template specialization 'allocate_vector<double, long>' requested here
+   58 |         allocate_vector<double>(sysmatAstro,mapNoss*nAstroPSolved,"sysmatAstro",myid);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/allocators.hpp:68:9: note: in instantiation of function template specialization 'fast_allocate_vector<double, int>' requested here
+   68 |         fast_allocate_vector<T>(ptr,elements);
+      |         ^
+src/gaiasim_includes/namespaces.hpp:62:9: note: in instantiation of function template specialization 'allocate_vector<double, int>' requested here
+   62 |         allocate_vector<double>(sysmatConstr,nTotConstr,"sysmatGloB",myid);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/namespaces.hpp:75:9: note: in instantiation of function template specialization 'fast_allocate_vector<int, long>' requested here
+   75 |         fast_allocate_vector<int>(instrCol,nc);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/namespaces.hpp:76:9: note: in instantiation of function template specialization 'fast_allocate_vector<int, int>' requested here
+   76 |         fast_allocate_vector<int>(instrConstrIlung,ninstr);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/namespaces.hpp:77:9: note: in instantiation of function template specialization 'fast_allocate_vector<long, long>' requested here
+   77 |         fast_allocate_vector<long>(matrixIndexAstro,mi);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:120:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  120 |         hipHostFree(ptr);
+      |         ^~~~~~~~~~~ ~~~
+src/gaiasim_includes/namespaces.hpp:82:9: note: in instantiation of function template specialization 'free_mem<double>' requested here
+   82 |         free_mem(sysmatAstro);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:120:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  120 |         hipHostFree(ptr);
+      |         ^~~~~~~~~~~ ~~~
+src/gaiasim_includes/namespaces.hpp:91:9: note: in instantiation of function template specialization 'free_mem<int>' requested here
+   91 |         free_mem(instrCol);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:120:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  120 |         hipHostFree(ptr);
+      |         ^~~~~~~~~~~ ~~~
+src/gaiasim_includes/namespaces.hpp:93:9: note: in instantiation of function template specialization 'free_mem<long>' requested here
+   93 |         free_mem(matrixIndexAstro);
+      |         ^
+21 warnings generated when compiling for gfx90a.
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+In file included from src/solvergaiaSim.cpp:35:
+src/gaiasim_includes/solver_utils.hpp:488:30: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+  488 |     printf("itnlim= %7ld\n", lsqr_input::itnlim);
+      |                     ~~~~     ^~~~~~~~~~~~~~~~~~
+      |                     %7d
+src/gaiasim_includes/solver_utils.hpp:507:30: warning: format specifies type 'short' but the argument has type 'long' [-Wformat]
+  507 |     printf("nGlobP= %7hd\n", glob_params::nGlobP);
+      |                     ~~~~     ^~~~~~~~~~~~~~~~~~~
+      |                     %7ld
+src/gaiasim_includes/solver_utils.hpp:540:33: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
+  540 |         printf("-nCovEle %ld ", numberOfCovEle);
+      |                          ~~~    ^~~~~~~~~~~~~~
+      |                          %d
+src/solvergaiaSim.cpp:180:93: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  179 |         printf("Abort. Empty system nparam=0 . nAstroPSolved=%d nAttP=%d nInstrPSolved=%d nGlobP=%d\n",
+      |                                                                                                  ~~
+      |                                                                                                  %ld
+  180 |                astro_params::nAstroPSolved, att_params::nAttP, astro_params::nInstrPSolved, glob_params::nGlobP);
+      |                                                                                             ^~~~~~~~~~~~~~~~~~~
+src/solvergaiaSim.cpp:389:123: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  388 |     printf("PE = %d, VrIdAstroPDimMax = %ld, VrIdAstroPDim = %ld, nAstroPSolved = %d, nAttParam = %d, nInstrParam = %d, nGlobalParam = %d\n",
+      |                                                                                                   ~~
+      |                                                                                                   %ld
+  389 |            system_params::myid, astro_params::VrIdAstroPDimMax, astro_params::VrIdAstroPDim, astro_params::nAstroPSolved, att_params::nAttParam, instr_params::nInstrParam, glob_params::nGlobalParam);
+      |                                                                                                                           ^~~~~~~~~~~~~~~~~~~~~
+src/solvergaiaSim.cpp:389:146: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  388 |     printf("PE = %d, VrIdAstroPDimMax = %ld, VrIdAstroPDim = %ld, nAstroPSolved = %d, nAttParam = %d, nInstrParam = %d, nGlobalParam = %d\n",
+      |                                                                                                                     ~~
+      |                                                                                                                     %ld
+  389 |            system_params::myid, astro_params::VrIdAstroPDimMax, astro_params::VrIdAstroPDim, astro_params::nAstroPSolved, att_params::nAttParam, instr_params::nInstrParam, glob_params::nGlobalParam);
+      |                                                                                                                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+src/solvergaiaSim.cpp:389:173: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  388 |     printf("PE = %d, VrIdAstroPDimMax = %ld, VrIdAstroPDim = %ld, nAstroPSolved = %d, nAttParam = %d, nInstrParam = %d, nGlobalParam = %d\n",
+      |                                                                                                                                        ~~
+      |                                                                                                                                        %ld
+  389 |            system_params::myid, astro_params::VrIdAstroPDimMax, astro_params::VrIdAstroPDim, astro_params::nAstroPSolved, att_params::nAttParam, instr_params::nInstrParam, glob_params::nGlobalParam);
+      |                                                                                                                                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/allocators.hpp:68:9: note: in instantiation of function template specialization 'fast_allocate_vector<double, long>' requested here
+   68 |         fast_allocate_vector<T>(ptr,elements);
+      |         ^
+src/gaiasim_includes/namespaces.hpp:58:9: note: in instantiation of function template specialization 'allocate_vector<double, long>' requested here
+   58 |         allocate_vector<double>(sysmatAstro,mapNoss*nAstroPSolved,"sysmatAstro",myid);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/allocators.hpp:68:9: note: in instantiation of function template specialization 'fast_allocate_vector<double, int>' requested here
+   68 |         fast_allocate_vector<T>(ptr,elements);
+      |         ^
+src/gaiasim_includes/namespaces.hpp:62:9: note: in instantiation of function template specialization 'allocate_vector<double, int>' requested here
+   62 |         allocate_vector<double>(sysmatConstr,nTotConstr,"sysmatGloB",myid);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/namespaces.hpp:75:9: note: in instantiation of function template specialization 'fast_allocate_vector<int, long>' requested here
+   75 |         fast_allocate_vector<int>(instrCol,nc);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/namespaces.hpp:76:9: note: in instantiation of function template specialization 'fast_allocate_vector<int, int>' requested here
+   76 |         fast_allocate_vector<int>(instrConstrIlung,ninstr);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:42:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   42 |         hipGetDevice(&device);
+      |         ^~~~~~~~~~~~ ~~~~~~~
+src/gaiasim_includes/namespaces.hpp:77:9: note: in instantiation of function template specialization 'fast_allocate_vector<long, long>' requested here
+   77 |         fast_allocate_vector<long>(matrixIndexAstro,mi);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:44:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+   44 |         hipMemAdvise(ptr, elements * sizeof(T), hipMemAdviseSetCoarseGrain, device);
+      |         ^~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/gaiasim_includes/allocators.hpp:120:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  120 |         hipHostFree(ptr);
+      |         ^~~~~~~~~~~ ~~~
+src/gaiasim_includes/namespaces.hpp:82:9: note: in instantiation of function template specialization 'free_mem<double>' requested here
+   82 |         free_mem(sysmatAstro);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:120:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  120 |         hipHostFree(ptr);
+      |         ^~~~~~~~~~~ ~~~
+src/gaiasim_includes/namespaces.hpp:91:9: note: in instantiation of function template specialization 'free_mem<int>' requested here
+   91 |         free_mem(instrCol);
+      |         ^
+In file included from src/solvergaiaSim.cpp:33:
+src/gaiasim_includes/allocators.hpp:120:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  120 |         hipHostFree(ptr);
+      |         ^~~~~~~~~~~ ~~~
+src/gaiasim_includes/namespaces.hpp:93:9: note: in instantiation of function template specialization 'free_mem<long>' requested here
+   93 |         free_mem(matrixIndexAstro);
+      |         ^
+21 warnings generated when compiling for host.
+acpp -std=c++20 -D__AMD__ -O3 -stdlib=libstdc++  --gcc-toolchain=/opt/cray/pe/gcc/12.2.0/snos --acpp-platform=rocm --acpp-stdpar --acpp-targets=hip:gfx90a --acpp-stdpar-unconditional-offload --acpp-gpu-arch=gfx90a -munsafe-fp-atomics -D__HIPCC__  -I/scratch/pawsey0007/<user_name>/src/24_sc_gaia/include -I/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1/include -c src/util.cpp -o build_obj/util_stdpar.o
+src/util.cpp:657:118: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  657 |             printf("ERROR: PE=%d NullSapce Equation ic=%d, sumVer[%d]=%ld and chkSumVer=%ld are not equal\n",myid,ic,i,sumVer,    chkSumVer);
+      |                                                                   ~~                                                 ^
+      |                                                                   %ld
+1 warning generated when compiling for gfx90a.
+src/util.cpp:657:118: warning: format specifies type 'int' but the argument has type 'long' [-Wformat]
+  657 |             printf("ERROR: PE=%d NullSapce Equation ic=%d, sumVer[%d]=%ld and chkSumVer=%ld are not equal\n",myid,ic,i,sumVer,    chkSumVer);
+      |                                                                   ~~                                                 ^
+      |                                                                   %ld
+1 warning generated when compiling for host.
+acpp -std=c++20 -D__AMD__ -O3 -stdlib=libstdc++  --gcc-toolchain=/opt/cray/pe/gcc/12.2.0/snos --acpp-platform=rocm --acpp-stdpar --acpp-targets=hip:gfx90a --acpp-stdpar-unconditional-offload --acpp-gpu-arch=gfx90a -munsafe-fp-atomics -D__HIPCC__  -I/scratch/pawsey0007/<user_name>/src/24_sc_gaia/include -I/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1/include -c src/lsqrblas.cpp -o build_obj/lsqrblas_stdpar.o
+acpp -std=c++20 -D__AMD__ -O3 -stdlib=libstdc++  --gcc-toolchain=/opt/cray/pe/gcc/12.2.0/snos --acpp-platform=rocm --acpp-stdpar --acpp-targets=hip:gfx90a --acpp-stdpar-unconditional-offload --acpp-gpu-arch=gfx90a -munsafe-fp-atomics -D__HIPCC__  -I/scratch/pawsey0007/<user_name>/src/24_sc_gaia/include -I/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1/include -c src/lsqr_stdpar.cpp -o build_obj/lsqr_stdpar.o
+src/lsqr_stdpar.cpp:881:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  881 |         checkHip( hipGetDeviceCount(&deviceCount) );
+      |         ^~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/lsqr_stdpar.cpp:882:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  882 |         checkHip( hipSetDevice(myid % deviceCount) );
+      |         ^~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+2 warnings generated when compiling for gfx90a.
+src/lsqr_stdpar.cpp:881:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  881 |         checkHip( hipGetDeviceCount(&deviceCount) );
+      |         ^~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/lsqr_stdpar.cpp:882:9: warning: ignoring return value of function declared with 'nodiscard' attribute [-Wunused-result]
+  882 |         checkHip( hipSetDevice(myid % deviceCount) );
+      |         ^~~~~~~~  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: loop not unrolled: the optimizer was unable to perform the requested transformation; the transformation might be disabled or specified as part of an unsupported transformation ordering [-Wpass-failed=transform-warning]
+warning: loop not unrolled: the optimizer was unable to perform the requested transformation; the transformation might be disabled or specified as part of an unsupported transformation ordering [-Wpass-failed=transform-warning]
+warning: loop not unrolled: the optimizer was unable to perform the requested transformation; the transformation might be disabled or specified as part of an unsupported transformation ordering [-Wpass-failed=transform-warning]
+5 warnings generated when compiling for host.
+acpp -std=c++20 -D__AMD__ -O3 -stdlib=libstdc++  --gcc-toolchain=/opt/cray/pe/gcc/12.2.0/snos --acpp-platform=rocm --acpp-stdpar --acpp-targets=hip:gfx90a --acpp-stdpar-unconditional-offload --acpp-gpu-arch=gfx90a -munsafe-fp-atomics -D__HIPCC__  -o GaiaGsrParSimStdparGPU_ACPP.x build_obj/lsqrblas_stdpar.o build_obj/lsqr_stdpar.o build_obj/solvergaiaSim_stdpar.o build_obj/util_stdpar.o -I/scratch/pawsey0007/<user_name>/src/24_sc_gaia/include -I/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1/include -L/opt/cray/pe/mpich/8.1.27/ofi/gnu/9.1/lib -lmpi 
